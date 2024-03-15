@@ -2,16 +2,17 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { DatabaseModule } from '@app/common/database';
 import { LoggerModule } from '@app/common/logger';
 import { WorkerDocument, WorkerSchema } from './models/worker.schema';
 import { AUTH_SERVICE } from '@app/common/constants';
-import { UsersModule } from '../../auth/src/users/users.module';
+import { UsersModule } from '@auth/users/users.module';
 import { WorkersController } from './workers.controller';
 import { ResponseInterceptor } from '@app/common/response';
 import { WorkersService } from './workers.service';
-import { UsersRepository } from '../../auth/src/users/users.repository';
+import { UsersRepository } from '@auth/users/users.repository';
+import { WorkersRepository } from "./workers.repository";
 
 @Module({
   imports: [
@@ -28,12 +29,6 @@ import { UsersRepository } from '../../auth/src/users/users.repository';
         TCP_PORT: Joi.number().required(),
         AUTH_HOST: Joi.string().required(),
         AUTH_PORT: Joi.number().required(),
-        ROLES_HOST: Joi.string().required(),
-        ROLES_PORT: Joi.number().required(),
-        PERMISSIONS_HOST: Joi.string().required(),
-        PERMISSIONS_PORT: Joi.number().required(),
-        PAYMENTS_HOST: Joi.string().required(),
-        PAYMENTS_PORT: Joi.number().required(),
       }),
     }),
     ClientsModule.registerAsync([
@@ -58,7 +53,7 @@ import { UsersRepository } from '../../auth/src/users/users.repository';
       useClass: ResponseInterceptor,
     },
     WorkersService,
-    ReservationsRepository,
+    WorkersRepository,
     UsersRepository,
   ],
 })
