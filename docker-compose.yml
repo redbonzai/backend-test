@@ -1,0 +1,34 @@
+services:
+  workers:
+    build:
+      context: .
+      dockerfile: ./apps/workers/docker/Dockerfile
+      target: development
+    command: pnpm run start:dev workers
+    env_file:
+      - ./apps/workers/.env
+    ports:
+      - '3100:3100'
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - limble
+
+  db:
+    image: mariadb:11.3.2
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "0.0.0.0:3309:3306"
+    environment:
+      MARIADB_USER: limble-test
+      MARIADB_PASSWORD: limble-test-password
+      MARIADB_DATABASE: limble
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+
+networks:
+  limble:
+    driver: bridge
