@@ -2,12 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '@app/common/database/schema/abstract.schema';
 
 @Schema({ versionKey: false, timestamps: true })
-export class WorkerDocument extends AbstractDocument {
+export class LocationDocument extends AbstractDocument {
   @Prop({ required: true })
-  username: string;
-
-  @Prop({ required: true })
-  hourlyWage: number;
+  name: string;
 }
 
-export const WorkerSchema = SchemaFactory.createForClass(WorkerDocument);
+export const LocationSchema = SchemaFactory.createForClass(LocationDocument);

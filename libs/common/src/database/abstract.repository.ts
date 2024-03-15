@@ -1,4 +1,4 @@
-import { AbstractDocument } from '@app/common/database/abstract.schema';
+import { AbstractDocument } from '@app/common/database/schema/abstract.schema';
 import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 import { Logger, NotFoundException } from '@nestjs/common';
 
