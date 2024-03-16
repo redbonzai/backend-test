@@ -2,7 +2,7 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class CreateWorkerDto {
   @IsString()
-  name: string;
+  username: string;
 
   @IsNumber()
   hourlyWage: number;
