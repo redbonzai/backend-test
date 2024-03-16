@@ -31,11 +31,17 @@
         "apps/auth/src/*"
       ],
       "@workers": [
-        "src/workers"
+        "apps/workers"
       ],
       "@workers/*": [
-        "src/workers/*"
+        "apps/workers/*"
       ],
+      "@locations": [
+        "apps/locations"
+      ],
+      "@locations/*": [
+        "src/locations/*"
+      ]
     }
   }
 }

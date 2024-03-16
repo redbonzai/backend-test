@@ -23,7 +23,20 @@ services:
     env_file:
       - ./apps/auth/.env
     ports:
-      - '3001:3001'
+      - '3200:3200'
+    volumes:
+      - .:/usr/src/app
+
+  location:
+    build:
+      context: .
+      dockerfile: ./apps/location/docker/Dockerfile
+      target: development
+    command: pnpm run start:dev location
+    env_file:
+      - ./apps/location/.env
+    ports:
+      - '3300:3300'
     volumes:
       - .:/usr/src/app
 
