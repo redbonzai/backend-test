@@ -13,6 +13,10 @@ export class LoggedTimeDocument extends AbstractDocument {
 
   @Prop({ type: WorkerDocument })
   worker: WorkerDocument;
+
+  @Prop({ type: LocationDocument })
+  location: LocationDocument;
 }
 
-export const LoggedTimeSchema = SchemaFactory.createForClass(LoggedTimeDocument);
+export const LoggedTimeSchema =
+  SchemaFactory.createForClass(LoggedTimeDocument);

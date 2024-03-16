@@ -16,7 +16,13 @@ describe('WorkersController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(workersController.getHello()).toBe('Hello World!');
+      expect(workersController.findAll()).toBe([
+        {
+          _id: '809dsdslklkjlkjl',
+          username: 'username1',
+          hourlyWage: 'hourlyWage',
+        },
+      ]);
     });
   });
 });

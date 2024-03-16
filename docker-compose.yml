@@ -14,20 +14,23 @@ services:
     networks:
       - limble
 
-  db:
-    image: mariadb:11.3.2
-    healthcheck:
-      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/docker/Dockerfile
+      target: development
+    command: pnpm run start:dev auth
+    env_file:
+      - ./apps/auth/.env
     ports:
-      - "0.0.0.0:3309:3306"
-    environment:
-      MARIADB_USER: limble-test
-      MARIADB_PASSWORD: limble-test-password
-      MARIADB_DATABASE: limble
-      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
+
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
 
 networks:
   limble:
