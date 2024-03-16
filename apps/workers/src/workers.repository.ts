@@ -8,7 +8,7 @@ import { CreateWorkerDto } from './dto/create-worker.dto';
 @Injectable()
 export class WorkersRepository extends AbstractRepository<AbstractDocument> {
   protected readonly logger = new Logger(WorkersRepository.name);
-  private workerModel: Model<WorkerDocument>;
+  private readonly workerModel: Model<WorkerDocument>;
   constructor(
     @InjectModel(WorkerDocument.name)
     workerModel: Model<WorkerDocument>,
