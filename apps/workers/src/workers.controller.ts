@@ -16,4 +16,14 @@ export class WorkersController {
   findAll(): Promise<AbstractDocument[]> {
     return this.workersService.findAll();
   }
+
+  @Get(':id')
+  async findOne(@Body() id: string): Promise<AbstractDocument> {
+    return await this.workersService.findOne(id);
+  }
+
+  // @Get()
+  // laborCost(): Promise<AbstractDocument[]> {
+  //   return this.workersService.laborCost();
+  // }
 }

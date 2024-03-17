@@ -1,12 +1,13 @@
 import { AbstractDocument, AbstractRepository } from '@app/common/database';
 import { Logger } from '@nestjs/common';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggedTimeDocument } from '@loggedtime/models';
 import { CreateLoggedTimeDto } from '@loggedtime/dto';
 import { TaskDocument } from '@tasks/models';
 import { WorkerDocument } from '@workers/models';
 import { LocationDocument } from '@locations/models';
+import { firstOrCreate } from '@app/common/database/first-or-create';
 
 export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
   protected readonly logger = new Logger(LoggedTimeRepository.name);
@@ -24,18 +25,82 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
     super(loggedTimeModel);
   }
 
-  // Generalized firstOrCreate function
-  private async firstOrCreate<T>(
-    model: Model<T>,
-    query: object,
-    createData: object,
-  ): Promise<T> {
-    let document = await model.findOne(query);
-    if (!document) {
-      document = new model(createData);
-      await document.save();
-    }
-    return document;
+  async laborCostByWorker(): Promise<any[]> {
+    return this.loggedTimeModel.aggregate([
+      {
+        $lookup: {
+          from: 'workerdocuments',
+          localField: 'worker',
+          foreignField: '_id',
+          as: 'workerDetails',
+        },
+      },
+      {
+        $unwind: '$workerDetails',
+      },
+      {
+        $group: {
+          _id: '$workerDetails.username',
+          totalHours: { $sum: { $divide: ['$timeSeconds', 3600] } },
+          hourlyWage: { $first: '$workerDetails.hourlyWage' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          worker: '$_id',
+          totalCost: { $multiply: ['$totalHours', '$hourlyWage'] },
+        },
+      },
+    ]);
+  }
+
+  async laborCostByLocation(): Promise<any[]> {
+    return this.loggedTimeModel.aggregate([
+      {
+        $lookup: {
+          from: 'locationdocuments', // Assuming this is your location collection name
+          localField: 'location',
+          foreignField: '_id',
+          as: 'locationDetails',
+        },
+      },
+      {
+        $unwind: '$locationDetails',
+      },
+      {
+        $lookup: {
+          from: 'workerdocuments', // The collection name for workers
+          localField: 'worker',
+          foreignField: '_id',
+          as: 'workerDetails',
+        },
+      },
+      {
+        $unwind: '$workerDetails',
+      },
+      {
+        $group: {
+          _id: '$locationDetails.name', // Group by location name
+          totalHours: { $sum: { $divide: ['$timeSeconds', 3600] } }, // Summing total hours worked
+          totalLaborCost: {
+            $sum: {
+              $multiply: [
+                { $divide: ['$timeSeconds', 3600] },
+                '$workerDetails.hourlyWage',
+              ],
+            },
+          }, // Calculating total labor cost
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          location: '$_id',
+          totalLaborCost: 1,
+        },
+      },
+    ]);
   }
 
   // Method to handle logged time creation or finding existing one
@@ -58,23 +123,19 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
       location: location._id,
     };
 
-    return this.firstOrCreate(
-      this.loggedTimeModel,
-      loggedTimeData,
-      loggedTimeData,
-    );
+    return firstOrCreate(this.loggedTimeModel, loggedTimeData, loggedTimeData);
   }
 
   private async firstOrCreateTask(
     taskName: string,
     locationName: string,
   ): Promise<TaskDocument> {
-    const location: LocationDocument = await this.firstOrCreate(
+    const location: LocationDocument = await firstOrCreate(
       this.locationModel,
       { name: locationName },
       { name: locationName },
     );
-    return this.firstOrCreate(
+    return firstOrCreate(
       this.taskModel,
       { description: taskName, 'location.name': locationName },
       { description: taskName, location },
@@ -85,7 +146,7 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
     workerName: string,
     hourlyWage: number,
   ): Promise<WorkerDocument> {
-    return this.firstOrCreate(
+    return firstOrCreate(
       this.workerModel,
       { username: workerName, hourlyWage },
       { username: workerName, hourlyWage },
@@ -95,59 +156,10 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
   private async firstOrCreateLocation(
     locationName: string,
   ): Promise<LocationDocument> {
-    return this.firstOrCreate(
+    return firstOrCreate(
       this.locationModel,
       { name: locationName },
       { name: locationName },
     );
   }
-
-  // Utility methods to find or create task, worker, and location
-  // private async findOrCreateTask(description: string): Promise<Types.ObjectId> {
-  //   let task = await this.taskModel.findOne({ description });
-  //   if (!task) {
-  //     task = await this.taskModel.create({ description });
-  //   }
-  //   return task._id;
-  // }
-  //
-  // private async findOrCreateWorker(
-  //   username: string,
-  //   hourlyWage: number,
-  // ): Promise<Types.ObjectId> {
-  //   let worker = await this.workerModel.findOne({ username });
-  //   if (!worker) {
-  //     worker = await this.workerModel.create({ username, hourlyWage });
-  //   }
-  //   return worker._id;
-  // }
-  //
-  // private async findOrCreateLocation(name: string): Promise<Types.ObjectId> {
-  //   let location = await this.locationModel.findOne({ name });
-  //   if (!location) {
-  //     location = await this.locationModel.create({ name });
-  //   }
-  //   return location._id;
-  // }
-  //
-  // // Main method to handle logged time creation
-  // async create(
-  //   loggedTimeDto: CreateLoggedTimeDto,
-  // ): Promise<LoggedTimeDocument> {
-  //   const { taskName, workerName, locationName, timeSeconds, hourlyWage } =
-  //     loggedTimeDto;
-  //
-  //   const taskId = await this.findOrCreateTask(taskName);
-  //   const workerId = await this.findOrCreateWorker(workerName, hourlyWage);
-  //   const locationId = await this.findOrCreateLocation(locationName);
-  //
-  //   const loggedTime = await this.loggedTimeModel.create({
-  //     task: taskId,
-  //     worker: workerId,
-  //     location: locationId,
-  //     timeSeconds,
-  //   });
-  //   console.log('LOGGED TIME CREATED: ', loggedTime);
-  //   return loggedTime;
-  // }
 }

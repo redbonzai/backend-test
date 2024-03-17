@@ -30,7 +30,6 @@ export class AuthService {
 
       return token;
     } catch (error) {
-      console.log('ERROR IN LOGIN: ', error);
       throw new Error(error.message);
     }
   }

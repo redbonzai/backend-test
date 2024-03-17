@@ -31,7 +31,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @MessagePattern('authenticate')
   async authenticate(@Payload() payload: any) {
-    console.log('PAYLOAD IN AUTHENTICATE: ', payload);
     return payload.user;
   }
 
@@ -43,8 +42,7 @@ export class AuthController {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     if (request.cookies?.Authentication || request.headers?.authentication) {
-      const logoutResponse = await this.authService.logout(response);
-      console.log('LOGOUT RESPONSE: ', logoutResponse);
+      await this.authService.logout(response);
     }
     return {
       message: 'success',

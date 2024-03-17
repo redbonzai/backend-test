@@ -18,4 +18,8 @@ export class WorkersService {
   findOne(_id: string): Promise<AbstractDocument> {
     return this.workersRepository.findOne({ _id });
   }
+
+  // laborCost(): Promise<AbstractDocument[]> {
+  //   return this.workersRepository.laborCost();
+  // }
 }

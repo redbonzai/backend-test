@@ -4,22 +4,48 @@ import { InjectModel } from '@nestjs/mongoose';
 import { TaskDocument } from '@tasks/models';
 import { Model } from 'mongoose';
 import { CreateTaskDto } from '@tasks/dto/create-task.dto';
+import { LocationDocument } from '@locations/models';
+import { firstOrCreate } from '@app/common/database/first-or-create';
+import { Task } from '@tasks/interfaces';
 
 @Injectable()
 export class TaskRepository extends AbstractRepository<AbstractDocument> {
   protected readonly logger = new Logger(TaskRepository.name);
-  private readonly taskModel: Model<TaskDocument>;
 
   constructor(
     @InjectModel(TaskDocument.name)
-    taskModel: Model<TaskDocument>,
+    private readonly taskModel: Model<TaskDocument>,
+    @InjectModel(LocationDocument.name)
+    private readonly locationModel: Model<LocationDocument>,
   ) {
     super(taskModel);
-    this.taskModel = taskModel;
   }
 
-  async create(task: CreateTaskDto): Promise<TaskDocument> {
-    const createTask = new this.taskModel(task);
-    return await createTask.save();
+  async create(createTaskDto: CreateTaskDto): Promise<TaskDocument> {
+    // Assuming you have a method to findOrCreateLocation that returns a LocationDocument
+    const locationDocument = await this.firstOrCreateLocation(
+      createTaskDto.location.name,
+    );
+
+    const taskData = {
+      ...createTaskDto,
+      location: locationDocument, // Replace the simple location name with the document
+    };
+
+    const task = new this.taskModel(taskData);
+    return task.save();
+  }
+
+  private async firstOrCreateLocation(
+    locationName: string,
+  ): Promise<LocationDocument> {
+    return firstOrCreate(
+      this.locationModel,
+      { name: locationName },
+      { name: locationName },
+    );
+  }
+  async completeTask(id: string, update: Partial<Task>): Promise<Task> {
+    return this.taskModel.findByIdAndUpdate(id, update, { new: true });
   }
 }

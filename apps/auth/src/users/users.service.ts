@@ -14,14 +14,12 @@ export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async create(createUserDto: CreateUserDto) {
-    console.log('CREATING USER', createUserDto);
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const createdUser = await this.usersRepository.create({
       ...createUserDto,
       email: createUserDto.email.toLowerCase(),
       password: hashedPassword,
     });
-    console.log('CREATED USER', createdUser);
     return createdUser;
   }
 
@@ -50,19 +48,15 @@ export class UsersService {
   }
 
   async validateCreateUser(createUserDto: CreateUserDto) {
-    console.log('validate user : ', createUserDto);
-    console.log('user exists : ', await this.userExists(createUserDto));
     if (!(await this.userExists(createUserDto))) {
       return true;
     }
   }
 
   async userExists(createUserDto: CreateUserDto) {
-    console.log('Checking if user exists', createUserDto);
     const user = await this.usersRepository.find({
       email: createUserDto.email,
     });
-    console.log('User EXISTS:', user);
     return user !== null;
   }
 

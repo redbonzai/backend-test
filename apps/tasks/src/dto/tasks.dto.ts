@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class TaskDto {
   @IsString()
@@ -8,4 +8,7 @@ export class TaskDto {
   @IsString()
   @IsNotEmpty()
   location: string;
+
+  @IsBoolean()
+  completed: boolean;
 }
