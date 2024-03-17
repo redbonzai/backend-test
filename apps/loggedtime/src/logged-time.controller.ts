@@ -11,7 +11,6 @@ export class LoggedTimeController {
   async create(
     @Body() loggedTimeDto: CreateLoggedTimeDto,
   ): Promise<AbstractDocument> {
-    console.log('LOGGED TIME REQUEST: ', loggedTimeDto);
     return await this.loggedTimeService.create(loggedTimeDto);
   }
 
@@ -23,5 +22,15 @@ export class LoggedTimeController {
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<AbstractDocument> {
     return await this.loggedTimeService.findOne(id);
+  }
+
+  @Get('labor/cost')
+  laborWorker(): Promise<AbstractDocument[]> {
+    return this.loggedTimeService.laborWorker();
+  }
+
+  @Get('labor/location')
+  laborLocation(): Promise<AbstractDocument[]> {
+    return this.loggedTimeService.laborLocation();
   }
 }

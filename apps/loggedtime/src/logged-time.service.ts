@@ -8,7 +8,6 @@ export class LoggedTimeService {
   constructor(private loggedTimeRepository: LoggedTimeRepository) {}
 
   async create(loggedTimeDto: CreateLoggedTimeDto): Promise<AbstractDocument> {
-    console.log('incoming to the service: ', loggedTimeDto);
     return this.loggedTimeRepository.create(loggedTimeDto);
   }
 
@@ -18,5 +17,13 @@ export class LoggedTimeService {
 
   findOne(_id: string): Promise<AbstractDocument> {
     return this.loggedTimeRepository.findOne({ _id });
+  }
+
+  laborWorker(): Promise<AbstractDocument[]> {
+    return this.loggedTimeRepository.laborCostByWorker();
+  }
+
+  laborLocation(): Promise<AbstractDocument[]> {
+    return this.loggedTimeRepository.laborCostByLocation();
   }
 }

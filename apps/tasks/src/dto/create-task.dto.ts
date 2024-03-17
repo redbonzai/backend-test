@@ -1,10 +1,19 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsObject,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { LocationDto } from '@locations/dto/locations.dto';
+import { Type } from 'class-transformer';
 
 export class CreateTaskDto {
   @IsNotEmpty()
   @IsString()
   description: string;
 
-  @IsString()
-  location: string;
+  @ValidateNested()
+  @Type(() => LocationDto)
+  @IsObject()
+  location: LocationDto;
 }
