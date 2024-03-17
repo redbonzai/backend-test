@@ -12,7 +12,7 @@ export class WorkerDocument extends AbstractDocument {
 }
 
 // Access the schema from the WorkerDocument class
-const WorkerSchema = SchemaFactory.createForClass(WorkerDocument);
+export const WorkerSchema = SchemaFactory.createForClass(WorkerDocument);
 
 // Define pre-save hook to generate _id field before saving
 WorkerSchema.pre<WorkerDocument>('save', function (next) {
@@ -22,5 +22,3 @@ WorkerSchema.pre<WorkerDocument>('save', function (next) {
   }
   next();
 });
-
-export { WorkerSchema };
