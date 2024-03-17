@@ -1,4 +1,16 @@
 services:
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/docker/Dockerfile
+      target: development
+    command: pnpm run start:dev auth
+    env_file:
+      - ./apps/auth/.env
+    ports:
+      - '3200:3200'
+    volumes:
+      - .:/usr/src/app
   workers:
     build:
       context: .
@@ -13,33 +25,48 @@ services:
       - .:/usr/src/app
     networks:
       - limble
-
-  auth:
+  locations:
     build:
       context: .
-      dockerfile: ./apps/auth/docker/Dockerfile
+      dockerfile: apps/locations/docker/Dockerfile
       target: development
-    command: pnpm run start:dev auth
+    command: pnpm run start:dev locations
     env_file:
-      - ./apps/auth/.env
+      - apps/locations/.env
     ports:
-      - '3200:3200'
+      - '3350:3350'
     volumes:
       - .:/usr/src/app
-
-  location:
+    networks:
+      - limble
+  tasks:
     build:
       context: .
-      dockerfile: ./apps/location/docker/Dockerfile
+      dockerfile: apps/tasks/docker/Dockerfile
       target: development
-    command: pnpm run start:dev location
+    command: pnpm run start:dev tasks
     env_file:
-      - ./apps/location/.env
+      - apps/tasks/.env
     ports:
-      - '3300:3300'
+      - '3400:3400'
     volumes:
       - .:/usr/src/app
-
+    networks:
+      - limble
+  loggedtime:
+    build:
+      context: .
+      dockerfile: ./apps/loggedtime/docker/Dockerfile
+      target: development
+    command: pnpm run start:dev loggedtime
+    env_file:
+      - ./apps/loggedtime/.env
+    ports:
+      - '4400:4400'
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - limble
   mongo:
     image: mongo
     ports:

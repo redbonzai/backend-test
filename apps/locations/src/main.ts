@@ -8,21 +8,25 @@ import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(LocationModule);
-  const configService = app.get(ConfigService);
+  app.setGlobalPrefix('api');
+  const locationConfigService = app.get(ConfigService);
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
       host: '0.0.0.0',
-      port: configService.get('TCP_PORT'),
+      port: locationConfigService.get('TCP_PORT'),
     },
   });
-
+  console.log(
+    'LOCATIONS SERVICE TCP PORT: ',
+    locationConfigService.get('TCP_PORT'),
+  );
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
 
   await app.startAllMicroservices();
-  await app.listen(configService.get('PORT'));
+  await app.listen(locationConfigService.get('PORT'));
 }
 bootstrap().then(() =>
   console.log('Location service is bootstrapped amd running'),

@@ -35,13 +35,31 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
-    "location": {
+    "locations": {
       "type": "application",
-      "root": "apps/location",
+      "root": "apps/locations",
       "entryFile": "main",
-      "sourceRoot": "apps/location/src",
+      "sourceRoot": "apps/locations/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/location/tsconfig.app.json"
+        "tsConfigPath": "apps/locations/tsconfig.app.json"
+      }
+    },
+    "tasks": {
+      "type": "application",
+      "root": "apps/tasks",
+      "entryFile": "main",
+      "sourceRoot": "apps/tasks/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/tasks/tsconfig.app.json"
+      }
+    },
+    "loggedtime": {
+      "type": "application",
+      "root": "apps/loggedtime",
+      "entryFile": "main",
+      "sourceRoot": "apps/loggedtime/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/loggedtime/tsconfig.app.json"
       }
     }
   },

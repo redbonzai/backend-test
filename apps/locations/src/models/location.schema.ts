@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AbstractDocument } from '@app/common/database/schema/abstract.schema';
 import { Types } from 'mongoose';
+import { AbstractDocument } from '@app/common/database/schema/abstract.schema';
 
 @Schema({ versionKey: false, timestamps: true })
 export class LocationDocument extends AbstractDocument {

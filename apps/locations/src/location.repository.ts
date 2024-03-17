@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { AbstractDocument, AbstractRepository } from '@app/common/database';
-import { LocationDocument } from './models/location.schema';
+import { LocationDocument } from '@locations/models';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';

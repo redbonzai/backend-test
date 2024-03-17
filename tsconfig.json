@@ -31,16 +31,28 @@
         "apps/auth/src/*"
       ],
       "@workers": [
-        "apps/workers"
+        "apps/workers/src"
       ],
       "@workers/*": [
-        "apps/workers/*"
+        "apps/workers/src/*"
       ],
       "@locations": [
-        "apps/locations"
+        "apps/locations/src"
       ],
       "@locations/*": [
-        "src/locations/*"
+        "apps/locations/src/*"
+      ],
+      "@tasks": [
+        "apps/tasks/src"
+      ],
+      "@tasks/*": [
+        "apps/tasks/src/*"
+      ],
+      "@loggedtime": [
+        "apps/loggedtime/src"
+      ],
+      "@loggedtime/*": [
+        "apps/loggedtime/src/*"
       ]
     }
   }

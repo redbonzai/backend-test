@@ -85,10 +85,13 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
-      "^@auth(|/.*)$": "<rootDir>/apps/auth/src/$1",
-      "@workers(|/.*)": "<rootDir>/apps/workers/src/$1",
-      "@locations(|/.*)": "<rootDir>/apps/locations/src/$1"
+      "^@app/common/(.*)$": "<rootDir>/libs/common/src/$1",
+      "^@auth/(.*)$": "<rootDir>/apps/auth/src/$1",
+      "^@workers/(.*)$": "<rootDir>/apps/workers/src/$1",
+      "^@locations/(.*)$": "<rootDir>/apps/locations/src/$1",
+      "^@tasks/(.*)$": "<rootDir>/apps/tasks/src/$1",
+      "^@loggedtime/(.*)$": "<rootDir>/apps/loggedtime/src/$1"
     }
+
   }
 }

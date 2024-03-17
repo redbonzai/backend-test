@@ -1,15 +1,15 @@
 import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
+import { TaskModule } from './task.module';
 import { Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
-import * as cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
-import { AuthModule } from './auth.module';
+import * as cookieParser from 'cookie-parser';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AuthModule);
-  const configService = app.get(ConfigService);
+  const app = await NestFactory.create(TaskModule);
   app.setGlobalPrefix('api');
+  const configService = app.get(ConfigService);
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
@@ -17,7 +17,7 @@ async function bootstrap() {
       port: configService.get('TCP_PORT'),
     },
   });
-  console.log('AUTH SERVICE TCP PORT: ', configService.get('TCP_PORT'));
+  console.log('TASK SERVICE TCP PORT: ', configService.get('TCP_PORT'));
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
@@ -25,5 +25,6 @@ async function bootstrap() {
   await app.startAllMicroservices();
   await app.listen(configService.get('PORT'));
 }
-
-bootstrap().then(() => console.log('Auth service is bootstrapped amd running'));
+bootstrap().then(() =>
+  console.log('The TASK service is bootstrapped and running'),
+);
