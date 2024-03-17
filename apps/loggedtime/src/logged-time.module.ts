@@ -12,12 +12,21 @@ import { LoggedTimeRepository } from '@loggedtime/loggedtime.repository';
 import { ResponseInterceptor } from '@app/common/response';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { UserMiddleware } from '@loggedtime/middleware/user/user.middleware';
+import { LocationRepository } from '@locations/location.repository';
+import { TaskRepository } from '@tasks/task.repository';
+import { WorkersRepository } from '@workers/workers.repository';
+import { TaskDocument, TaskSchema } from '@tasks/models';
+import { WorkerDocument, WorkerSchema } from '@workers/models';
+import { LocationDocument, LocationSchema } from '@locations/models';
 
 @Module({
   imports: [
     DatabaseModule,
     DatabaseModule.forFeature([
       { name: LoggedTimeDocument.name, schema: LoggedTimeSchema },
+      { name: TaskDocument.name, schema: TaskSchema },
+      { name: WorkerDocument.name, schema: WorkerSchema },
+      { name: LocationDocument.name, schema: LocationSchema },
     ]),
     LoggerModule,
     ConfigModule.forRoot({
@@ -52,6 +61,9 @@ import { UserMiddleware } from '@loggedtime/middleware/user/user.middleware';
     },
     LoggedTimeService,
     LoggedTimeRepository,
+    LocationRepository,
+    TaskRepository,
+    WorkersRepository,
   ],
 })
 export class LoggedTimeModule implements NestModule {

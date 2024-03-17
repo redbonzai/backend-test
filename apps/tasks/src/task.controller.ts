@@ -5,7 +5,7 @@ import { TaskDocument } from '@tasks/models';
 import { CreateTaskDto } from '@tasks/dto/create-task.dto';
 import { AbstractDocument } from '@app/common/database';
 
-@Controller('task')
+@Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 

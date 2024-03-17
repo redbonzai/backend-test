@@ -8,11 +8,10 @@ export class LocationDocument extends AbstractDocument {
   name: string;
 }
 
-const LocationSchema = SchemaFactory.createForClass(LocationDocument);
+export const LocationSchema = SchemaFactory.createForClass(LocationDocument);
 LocationSchema.pre<LocationDocument>('save', function (next) {
   if (!this._id) {
     this._id = new Types.ObjectId();
   }
   next();
 });
-export { LocationSchema };

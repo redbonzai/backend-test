@@ -13,11 +13,10 @@ export class TaskDocument extends AbstractDocument {
 }
 
 // pre-save hook to ensure that the _id is set before saving the document
-const TaskSchema = SchemaFactory.createForClass(TaskDocument);
+export const TaskSchema = SchemaFactory.createForClass(TaskDocument);
 TaskSchema.pre<TaskDocument>('save', function (next) {
   if (!this._id) {
     this._id = new Types.ObjectId();
   }
   next();
 });
-export { TaskSchema };

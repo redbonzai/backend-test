@@ -1,31 +1,24 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsObject,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { TaskDto } from '@tasks/dto/tasks.dto';
-import { WorkerDto } from '@workers/dto/worker.dto';
-import { LocationDto } from '@locations/dto/locations.dto';
+// create-logged-time.dto.ts
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
 export class CreateLoggedTimeDto {
-  @IsNumber()
   @IsNotEmpty()
+  @IsString()
+  taskName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  workerName: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  hourlyWage: number;
+
+  @IsNotEmpty()
+  @IsString()
+  locationName: string;
+
+  @IsNotEmpty()
+  @IsNumber()
   timeSeconds: number;
-
-  @IsObject()
-  @ValidateNested()
-  @Type(() => TaskDto)
-  task: TaskDto;
-
-  @IsObject()
-  @ValidateNested()
-  @Type(() => WorkerDto)
-  worker: WorkerDto;
-
-  @IsObject()
-  @ValidateNested()
-  @Type(() => LocationDto)
-  location: LocationDto;
 }
