@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { LocationController } from './location.controller';
 import { LocationService } from './location.service';
 import { DatabaseModule } from '@app/common/database';
-import { LocationDocument, LocationSchema } from './models/location.schema';
+import {
+  LocationDocument,
+  LocationSchema,
+} from '@locations/models/location.schema';
 import { LoggerModule } from '@app/common/logger';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
@@ -28,6 +31,8 @@ import { LocationRepository } from './location.repository';
         AUTH_HOST: Joi.string().required(),
         AUTH_PORT: Joi.number().required(),
       }),
+      envFilePath: ['.env'],
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
     }),
     ClientsModule.registerAsync([
       {

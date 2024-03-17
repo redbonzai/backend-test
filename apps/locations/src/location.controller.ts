@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { LocationService } from './location.service';
 import { AbstractDocument } from '@app/common/database';
 import { CreateLocationDto } from './dto/create-location.dto';

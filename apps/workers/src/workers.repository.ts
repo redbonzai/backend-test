@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { AbstractRepository, AbstractDocument } from '@app/common/database';
-import { WorkerDocument } from './models/worker.schema';
+import { WorkerDocument } from '@workers/models';
 import { CreateWorkerDto } from './dto/create-worker.dto';
 
 @Injectable()
