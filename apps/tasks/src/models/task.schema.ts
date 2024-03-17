@@ -10,6 +10,9 @@ export class TaskDocument extends AbstractDocument {
 
   @Prop({ type: LocationDocument })
   location: LocationDocument;
+
+  @Prop({ required: true, default: false })
+  completed: boolean;
 }
 
 // pre-save hook to ensure that the _id is set before saving the document

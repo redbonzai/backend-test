@@ -1,13 +1,13 @@
-import { AbstractDocument, AbstractRepository } from "@app/common/database";
-import { Logger } from "@nestjs/common";
-import { Model } from "mongoose";
-import { InjectModel } from "@nestjs/mongoose";
-import { LoggedTimeDocument } from "@loggedtime/models";
-import { CreateLoggedTimeDto } from "@loggedtime/dto";
-import { TaskDocument } from "@tasks/models";
-import { WorkerDocument } from "@workers/models";
-import { LocationDocument } from "@locations/models";
-import { firstOrCreate } from "@app/common/database/first-or-create";
+import { AbstractDocument, AbstractRepository } from '@app/common/database';
+import { Logger } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { LoggedTimeDocument } from '@loggedtime/models';
+import { CreateLoggedTimeDto } from '@loggedtime/dto';
+import { TaskDocument } from '@tasks/models';
+import { WorkerDocument } from '@workers/models';
+import { LocationDocument } from '@locations/models';
+import { firstOrCreate } from '@app/common/database/first-or-create';
 
 export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
   protected readonly logger = new Logger(LoggedTimeRepository.name);

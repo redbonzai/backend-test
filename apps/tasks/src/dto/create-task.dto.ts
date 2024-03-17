@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsNotEmpty,
   IsObject,
   IsString,
@@ -16,4 +17,7 @@ export class CreateTaskDto {
   @Type(() => LocationDto)
   @IsObject()
   location: LocationDto;
+
+  @IsBoolean()
+  completed: boolean;
 }
