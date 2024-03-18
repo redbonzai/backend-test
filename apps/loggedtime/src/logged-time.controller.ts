@@ -1,13 +1,29 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { LoggedTimeService } from './logged-time.service';
 import { AbstractDocument } from '@app/common/database';
 import { CreateLoggedTimeDto } from '@loggedtime/dto/create-loggedtime.dto';
+import { LaborCostFilterDto } from '@loggedtime/dto/labor-cost-filter.dto';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('Logged Time')
 @Controller('loggedtime')
 export class LoggedTimeController {
   constructor(private readonly loggedTimeService: LoggedTimeService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create logged time' })
+  @ApiResponse({
+    status: 201,
+    description: 'The logged time has been successfully created.',
+    type: AbstractDocument,
+  })
+  @ApiBody({ type: CreateLoggedTimeDto })
   async create(
     @Body() loggedTimeDto: CreateLoggedTimeDto,
   ): Promise<AbstractDocument> {
@@ -15,22 +31,89 @@ export class LoggedTimeController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all logged times' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of all logged times',
+    type: AbstractDocument,
+    isArray: true,
+  })
   findAll(): Promise<AbstractDocument[]> {
     return this.loggedTimeService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a specific logged time by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Details of the specific logged time',
+    type: AbstractDocument,
+  })
   async findOne(@Param('id') id: string): Promise<AbstractDocument> {
     return await this.loggedTimeService.findOne(id);
   }
 
   @Get('labor/cost')
-  laborWorker(): Promise<AbstractDocument[]> {
-    return this.loggedTimeService.laborWorker();
+  @ApiOperation({ summary: 'Get labor cost for workers' })
+  @ApiResponse({
+    status: 200,
+    description: 'Labor cost for workers',
+    type: AbstractDocument,
+    isArray: true,
+  })
+  @ApiQuery({
+    name: 'workerId',
+    type: 'string',
+    required: false,
+    description: 'Worker ID to filter by',
+  })
+  @ApiQuery({
+    name: 'startDate',
+    type: 'string',
+    required: false,
+    description: 'Start date of the period',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    type: 'string',
+    required: false,
+    description: 'End date of the period',
+  })
+  laborWorker(
+    @Query() filterDto: LaborCostFilterDto,
+  ): Promise<AbstractDocument[]> {
+    return this.loggedTimeService.laborWorker(filterDto);
   }
 
   @Get('labor/location')
-  laborLocation(): Promise<AbstractDocument[]> {
-    return this.loggedTimeService.laborLocation();
+  @ApiOperation({ summary: 'Get labor cost by location' })
+  @ApiResponse({
+    status: 200,
+    description: 'Labor cost by location',
+    type: AbstractDocument,
+    isArray: true,
+  })
+  @ApiQuery({
+    name: 'locationId',
+    type: 'string',
+    required: false,
+    description: 'Location ID to filter by',
+  })
+  @ApiQuery({
+    name: 'startDate',
+    type: 'string',
+    required: false,
+    description: 'Start date of the period',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    type: 'string',
+    required: false,
+    description: 'End date of the period',
+  })
+  laborLocation(
+    @Query() filterDto: LaborCostFilterDto,
+  ): Promise<AbstractDocument[]> {
+    return this.loggedTimeService.laborLocation(filterDto);
   }
 }

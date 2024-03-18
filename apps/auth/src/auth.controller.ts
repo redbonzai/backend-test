@@ -8,7 +8,9 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserDocument } from '@auth/users/models';
 import { UsersService } from './users/users.service';
 import { GetUserDto } from './users/dto/get-user.dto';
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -18,6 +20,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @ApiOperation({ summary: 'Login a user' })
+  @ApiResponse({ status: 201, description: 'User successfully logged in', type: UserDocument })
   async login(
     @CurrentUser() user: UserDocument,
     @Res({ passthrough: true }) response: Response,
@@ -35,6 +39,8 @@ export class AuthController {
   }
 
   @Post('logout')
+  @ApiOperation({ summary: 'Logout a user' })
+  @ApiResponse({ status: 200, description: 'User successfully logged out' })
   async logout(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,

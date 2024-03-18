@@ -1,0 +1,574 @@
+{
+	"info": {
+		"_postman_id": "2bbf475f-9528-4f9e-ad9f-e85b21009e50",
+		"name": "LIMBLE BACKEND ASSESSMENT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2382474",
+		"_collection_link": "https://redbonzai-postman.postman.co/workspace/My-Workspace~68c19533-8412-45c3-821a-d73f0c148b2d/collection/2382474-2bbf475f-9528-4f9e-ad9f-e85b21009e50?action=share&source=collection_link&creator=2382474"
+	},
+	"item": [
+		{
+			"name": "WORKERS",
+			"item": [
+				{
+					"name": "All Workers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3100/workers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3100",
+							"path": [
+								"workers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Total cost by worker",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3100/workers/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3100",
+							"path": [
+								"workers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Worker",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"jackanka\",\n    \"hourlyWage\": 65\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3100/api/workers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3100",
+							"path": [
+								"api",
+								"workers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"email\": \"christian@redbonzai.com\",\n    \"password\": \"Nakamichi5963!@$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3200/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"email\": \"christian@aol.com\",\n    \"password\": \"Nakamichi5963!@$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/users/65f4e3b8c1094241857bbe31",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"users",
+								"65f4e3b8c1094241857bbe31"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3200/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "USER By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3200/api/users/65f4e3b8c1094241857bbe31",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"api",
+								"users",
+								"65f4e3b8c1094241857bbe31"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "CURRENT AUTH USER",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "applications/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3200/users/current",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"users",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"email\": \"christian@redbonzai.com\",\n    \"password\": \"Nakamichi5963!@$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3200/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "USER LOGOUT",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"email\": \"christian@redbonzai.com\",\n    \"password\": \"Nakamichi5963!@$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AUTH All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3200/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LOCATION",
+			"item": [
+				{
+					"name": "Add Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"restaurant down the road\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3350/locations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3350",
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Locations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3300/locations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TASK",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"change-car-oil\",\n    \"location\": {\n        \"name\": \"blockbuster-video\"\n    },\n    \"completed\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3400/api/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3400",
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3400/api/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3400",
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task by ObjectId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3400/api/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3400",
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task by ObjectId Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3400/api/tasks/65f779ac7056875318f35df8/completion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3400",
+							"path": [
+								"api",
+								"tasks",
+								"65f779ac7056875318f35df8",
+								"completion"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LOGGED TIME",
+			"item": [
+				{
+					"name": "Create Logged Time",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"timeSeconds\": 9600,\n    \"hourlyWage\": 3275,\n    \"taskName\": \"paint-fence\",\n    \"workerName\": \"waffleman\",\n    \"locationName\": \"blockbuster-video\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4400/api/loggedtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"api",
+								"loggedtime"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Logged Time",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4400/api/loggedtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"api",
+								"loggedtime"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Loggedtime by objectId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4400/api/loggedtime/65f71cfb5147e99f39372bcf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"api",
+								"loggedtime",
+								"65f71cfb5147e99f39372bcf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Labor Cost By Worker",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4400/api/loggedtime/labor/cost",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"api",
+								"loggedtime",
+								"labor",
+								"cost"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Labor Cost By Location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4400/api/loggedtime/laborcost",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4400",
+							"path": [
+								"api",
+								"loggedtime",
+								"laborcost"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

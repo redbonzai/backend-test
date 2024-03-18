@@ -4,10 +4,23 @@ import { WorkersModule } from './workers.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import * as cookieParser from 'cookie-parser';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { readPackageVersion } from '@app/common/utilities';
 
 async function bootstrap() {
   const app = await NestFactory.create(WorkersModule);
   app.setGlobalPrefix('api');
+
+  // Swagger configuration
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Workers Service')
+    .setDescription('The Workers Service API Description')
+    .setVersion(readPackageVersion())
+    .build();
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api/swagger/docs', app, document); // Setup Swagger at /api/docs path
+
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
   app.use(cookieParser());

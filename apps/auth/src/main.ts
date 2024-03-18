@@ -5,11 +5,24 @@ import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
 import { AuthModule } from './auth.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { readPackageVersion } from '@app/common/utilities';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
   const configService = app.get(ConfigService);
   app.setGlobalPrefix('api');
+
+  // Swagger configuration
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Auth Service')
+    .setDescription('The Auth Service API Description')
+    .setVersion(readPackageVersion())
+    .build();
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api/swagger/docs', app, document); // Setup Swagger at /api/docs path
+
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {

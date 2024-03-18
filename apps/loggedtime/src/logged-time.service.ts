@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AbstractDocument } from '@app/common/database';
 import { LoggedTimeRepository } from '@loggedtime/loggedtime.repository';
 import { CreateLoggedTimeDto } from '@loggedtime/dto';
+import { LaborCostFilterDto } from '@loggedtime/dto/labor-cost-filter.dto';
 
 @Injectable()
 export class LoggedTimeService {
@@ -19,11 +20,11 @@ export class LoggedTimeService {
     return this.loggedTimeRepository.findOne({ _id });
   }
 
-  laborWorker(): Promise<AbstractDocument[]> {
-    return this.loggedTimeRepository.laborCostByWorker();
+  laborWorker(filterDto: LaborCostFilterDto): Promise<AbstractDocument[]> {
+    return this.loggedTimeRepository.laborCostByWorker(filterDto);
   }
 
-  laborLocation(): Promise<AbstractDocument[]> {
-    return this.loggedTimeRepository.laborCostByLocation();
+  laborLocation(filterDto: LaborCostFilterDto): Promise<AbstractDocument[]> {
+    return this.loggedTimeRepository.laborCostByLocation(filterDto);
   }
 }

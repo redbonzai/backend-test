@@ -5,10 +5,23 @@ import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { readPackageVersion } from '@app/common/utilities';
 
 async function bootstrap() {
   const app = await NestFactory.create(LoggedTimeModule);
   app.setGlobalPrefix('api');
+
+  // Swagger configuration
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Logged Time Service')
+    .setDescription('The Logged Time Service API Description')
+    .setVersion(readPackageVersion())
+    .build();
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api/swagger/docs', app, document); // Setup Swagger at /api/docs path
+
   const config = app.get(ConfigService);
   app.connectMicroservice({
     transport: Transport.TCP,

@@ -1,6 +1,6 @@
 import { AbstractDocument, AbstractRepository } from '@app/common/database';
 import { Logger } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggedTimeDocument } from '@loggedtime/models';
 import { CreateLoggedTimeDto } from '@loggedtime/dto';
@@ -8,6 +8,7 @@ import { TaskDocument } from '@tasks/models';
 import { WorkerDocument } from '@workers/models';
 import { LocationDocument } from '@locations/models';
 import { firstOrCreate } from '@app/common/database/first-or-create';
+import { LaborCostFilterDto } from '@loggedtime/dto/labor-cost-filter.dto';
 
 export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
   protected readonly logger = new Logger(LoggedTimeRepository.name);
@@ -25,19 +26,61 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
     super(loggedTimeModel);
   }
 
-  async laborCostByWorker(): Promise<any[]> {
-    return this.loggedTimeModel.aggregate([
+  buildMatchStages(filterDto: LaborCostFilterDto): any[] {
+    const matchStages = [];
+
+    if (filterDto.includeCompleted !== undefined) {
+      console.log('INCLUDES COMPLETED: ', filterDto.includeCompleted);
+      matchStages.push({
+        $match: { 'taskDetails.completed': filterDto.includeCompleted },
+      });
+    }
+
+    if (filterDto.workerIds && filterDto.workerIds.length > 0) {
+      console.log('INCLUDES WORKER IDS: ', filterDto.workerIds);
+      matchStages.push({
+        $match: {
+          'workerDetails._id': {
+            $in: filterDto.workerIds.map((id) => new Types.ObjectId(id)),
+          },
+        },
+      });
+    }
+
+    if (filterDto.locationIds && filterDto.locationIds.length > 0) {
+      console.log('INCLUDES LOCATION IDS: ', filterDto.locationIds);
+      matchStages.push({
+        $match: {
+          'locationDetails._id': {
+            $in: filterDto.locationIds.map((id) => new Types.ObjectId(id)),
+          },
+        },
+      });
+    }
+
+    console.log('MATCH STAGES : ', matchStages);
+
+    // Add any other filters here
+
+    return matchStages;
+  }
+
+  async laborCostByWorker(filterDto: LaborCostFilterDto): Promise<any[]> {
+    console.log('filterDto', filterDto);
+    const matchStages = this.buildMatchStages(filterDto);
+    console.log('matchStages', matchStages);
+
+    const pipeline = [
+      ...matchStages, // Apply filter conditions
       {
         $lookup: {
-          from: 'workerdocuments',
+          from: 'workerdocuments', // Ensure this matches your MongoDB collection name
           localField: 'worker',
           foreignField: '_id',
           as: 'workerDetails',
         },
       },
-      {
-        $unwind: '$workerDetails',
-      },
+      { $unwind: '$workerDetails' },
       {
         $group: {
           _id: '$workerDetails.username',
@@ -52,11 +95,14 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
           totalCost: { $multiply: ['$totalHours', '$hourlyWage'] },
         },
       },
-    ]);
-  }
+    ];
 
-  async laborCostByLocation(): Promise<any[]> {
-    return this.loggedTimeModel.aggregate([
+    return await this.loggedTimeModel.aggregate(pipeline).exec();
+  }
+  async laborCostByLocation(filterDto: LaborCostFilterDto): Promise<any[]> {
+    const matchStages = this.buildMatchStages(filterDto);
+    const pipeline = [
+      ...matchStages,
       {
         $lookup: {
           from: 'locationdocuments', // Assuming this is your location collection name
@@ -100,8 +146,52 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
           totalLaborCost: 1,
         },
       },
-    ]);
+    ];
+
+    // const pipeline = [
+    //   ...matchStages, // Apply filter conditions
+    //   {
+    //     $lookup: {
+    //       from: 'locationdocuments', // Ensure this matches your MongoDB collection name
+    //       localField: 'location',
+    //       foreignField: '_id',
+    //       as: 'locationDetails',
+    //     },
+    //   },
+    //   { $unwind: '$locationDetails' },
+    //   {
+    //     $lookup: {
+    //       from: 'workerdocuments', // Ensure this matches your MongoDB collection name
+    //       localField: 'worker',
+    //       foreignField: '_id',
+    //       as: 'workerDetails',
+    //     },
+    //   },
+    //   { $unwind: '$workerDetails' },
+    //   {
+    //     $group: {
+    //       _id: '$locationDetails.name',
+    //       totalHours: { $sum: { $divide: ['$timeSeconds', 3600] } },
+    //       totalLaborCost: {
+    //         $sum: { $multiply: ['$totalHours', '$workerDetails.hourlyWage'] },
+    //       },
+    //     },
+    //   },
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       location: '$_id',
+    //       totalLaborCost: 1,
+    //     },
+    //   },
+    // ];
+
+    return await this.loggedTimeModel.aggregate(pipeline).exec();
   }
+
+  // async laborCostByLocation(): Promise<any[]> {
+  //   return this.loggedTimeModel.aggregate();
+  // }
 
   // Method to handle logged time creation or finding existing one
   async create(createDto: CreateLoggedTimeDto): Promise<LoggedTimeDocument> {
