@@ -4,12 +4,11 @@ import {
   Inject,
   Injectable,
   Logger,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Reflector } from '@nestjs/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
-import { UserDto } from '@app/common';
+import { CreateUserDto } from '@auth/users/dto/create-user.dto';
 import { AUTH_SERVICE } from '@app/common/constants/services';
 
 @Injectable()
@@ -31,22 +30,12 @@ export class JwtAuthGuard implements CanActivate {
       return false;
     }
 
-    const roles =
-      this.reflector.get<string[]>('roles', context.getHandler()) || [];
-    console.log('ROLES IN JWT-AUTH.GUARD: ', roles);
-
     return this.authClient
-      .send<UserDto>('authenticate', {
+      .send<CreateUserDto>('authenticate', {
         Authentication: jwt,
       })
       .pipe(
-        tap((res: UserDto) => {
-          for (const role of roles) {
-            if (!res.roles.includes(role)) {
-              this.logger.error('INSUFFICIENT PERMISSIONS');
-              throw new UnauthorizedException('INSUFFICIENT PERMISSIONS');
-            }
-          }
+        tap((res: CreateUserDto) => {
           context.switchToHttp().getRequest().user = res;
         }), // return true if we can authenticate the user.
         map(() => true), // returns true on successful response from auth ms.

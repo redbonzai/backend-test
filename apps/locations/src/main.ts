@@ -2,13 +2,26 @@ import { NestFactory } from '@nestjs/core';
 import { LocationModule } from './location.module';
 import { ConfigService } from '@nestjs/config';
 import { Transport } from '@nestjs/microservices';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
+import { readPackageVersion } from '@app/common/utilities';
 
 async function bootstrap() {
   const app = await NestFactory.create(LocationModule);
   app.setGlobalPrefix('api');
+
+  // Swagger configuration
+  const config = new DocumentBuilder()
+    .setTitle('Locations Service')
+    .setDescription('The locations service API description')
+    .setVersion(readPackageVersion())
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/swagger/docs', app, document); // Setup Swagger at /api/docs path
+
   const locationConfigService = app.get(ConfigService);
   app.connectMicroservice({
     transport: Transport.TCP,
