@@ -26,18 +26,18 @@ WORKER SERVICE: 3100
 Each respective service has an `api` global prefix configured in its main.ts file,
 
 ## SERVICE URLS:
-AUTH SERVICE: http://localhost:3200/api
-LOCATION SERVICE: http://localhost:3350/api
-LOGGED TIME SERVICE: http://localhost:4400/api
-TASKS SERVICE: http://localhost:3400/api
-WORKER SERVICE: http://localhost:3100/api
+- AUTH SERVICE: http://localhost:3200/api
+- LOCATION SERVICE: http://localhost:3350/api
+- LOGGED TIME SERVICE: http://localhost:4400/api
+- TASKS SERVICE: http://localhost:3400/api
+- WORKER SERVICE: http://localhost:3100/api
 
 ## SWAGGER DOCS
-AUTH SERVICE : http://localhost:3200/api/swagger/docs
-LOCATION SERVICE : http://localhost:3350/api/swagger/docs
-LOGGED TIME SERVICE : http://localhost:4400/api/swagger/docs
-TASKS SERVICE : http://localhost:3400/api/swagger/docs
-WORKER SERVICE : http://localhost:3100/api/swagger/docs
+- AUTH SERVICE : http://localhost:3200/api/swagger/docs
+- LOCATION SERVICE : http://localhost:3350/api/swagger/docs
+- LOGGED TIME SERVICE : http://localhost:4400/api/swagger/docs
+- TASKS SERVICE : http://localhost:3400/api/swagger/docs
+- WORKER SERVICE : http://localhost:3100/api/swagger/docs
 
 ## MONGODB
 We are using the Mongodb Data store to store and manipulate the data.
