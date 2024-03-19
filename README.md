@@ -1,5 +1,9 @@
 # Installation
-
+First step is to convert all the env.example files to .env files.
+Every service has it's own .env file, and the .env.example file is located in the root of the service directory.
+```terminal
+cp .env.example .env
+```
 ## DOCKER
 
 To set up the environment, you will need to first install [Docker](https://docs.docker.com/engine/install/).
@@ -9,7 +13,7 @@ docker compose up
 ```
 To bring up the services. 
 You will see the pino logs starting to appear.
-## PROGRAMMING LANGUAGE 
+## PROGRAMMING LANGUAGE
  - Typescript
 
 ## POSTMAN Collection
@@ -55,23 +59,34 @@ THis is configured within each service' module.ts file.
 - API DESIGN Follows open api specification
 - Authenticated user can transact these queries per the JwtAuthGuard
 
-Globally available resources:
-1.  LOGGER
+### Globally available resources:
+1.  PINO HTTP LOGGER
 2.  response Serializer ( can be understood by AWS Cloudwatch )
 3.  Mongodb Data store
 4.  Authentication Guard
 5.  Response interceptor ( formats the responses into a data property, and outputs API current version )
 6.  Global API prefix on API calls
 7.  Swagger doc generator
+8. Custom API version reader that is diplayed by the response interceptor, and swagger docs
+9. Global directory aliases that allows us to write elegant paths in imports.
+For example, instead of writing ; 
+```typescript
+import { AuthService } from '../../../auth/auth.service';
+````
+We can write:
+```typescript
+import { AuthService } from '@auth/auth.service';
+````
+### NICE TO HAVES (If time would have permitted ):
+- Create buildspec for deploying microservices into AWS ECR repositories.
+- Kubernetes deployment configurations 
+- Jest Tests
+- Customized logger for production, and development ( development uses pino-pretty )
+- Database migration configuration
 
-
-NICE TO HAVES (If time would have permitted ):
-create buildspec for deploying microservices into AWS ECR repositories.
-Swagger docs located at http://localhost:PORT/api/swagger/docs
-Jest Tests
-Customized logger for production, and development ( development uses pino-pretty )
-
-
-Create kubernetes properties files, in order to deploy services to kubernetes clusters.
-
-
+### TYPICAL PARAMETERS PASS TO THE AGGREGATED QUERIES
+```terminal
+locationIds:65f779ac7056875318f35df5
+includeCompleted:false
+workerIds:65f8a856867b4bab8ab29f88,65f9f93cc17f352415384d64,65f779ac7056875318f35dfb
+```
