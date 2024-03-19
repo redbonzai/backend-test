@@ -98,11 +98,11 @@ Is located in the `libs/src` directory.
 
 Every microservice has its own PORT & TCP PORT. 
 Here they are listed
-AUTH SERVICE: 3200
-LOCATION SERVICE: 3350
-LOGGED TIME SERVICE: 4400
-TASKS SERVICE: 3400
-WORKER SERVICE: 3100
+- AUTH SERVICE: 3200
+- LOCATION SERVICE: 3350
+- LOGGED TIME SERVICE: 4400
+- TASKS SERVICE: 3400
+- WORKER SERVICE: 3100
 
 Each respective service has an `api` global prefix configured in its main.ts file,
 
