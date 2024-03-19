@@ -1,19 +1,111 @@
-# Installation
+## INSTALLATION
+
 First step is to convert all the env.example files to .env files.
 Every service has it's own .env file, and the .env.example file is located in the root of the service directory.
 ```terminal
 cp .env.example .env
 ```
-## DOCKER
 
+## ENV FILES
+Every service has its own env.example file. 
+You will have to copy that file into an .env file. 
+```terminal
+ cp .env.example .env
+```
+## DOCKER
 To set up the environment, you will need to first install [Docker](https://docs.docker.com/engine/install/).
 Navigate to the project directory and run:
+
 ```terminal
 docker compose up
 ```
 To bring up the services. 
 You will see the pino logs starting to appear.
-## PROGRAMMING LANGUAGE
+This will stand up the services, You will see the pino logs starting to appear.
+
+## PROGRAMMING LANGUAGE 
+ - Typescript
+
+## Running the app
+>make sure that you have docker installed in order to spin op all the services.
+Each service should have it's .env.sample file that you need to convert into .env files.  Add the ports that you want each service to have.
+Note:
+auth, roles, permissions each have tcp ports for internal communication, since roles, and permissions supply proper authorizatino, and auth supplies authentication.
+--
+>
+
+## Setting Up MongoDB For Local Development (MAC OS & Linux)
+>See this DOC FILE for more info FIRST: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
+Enter the following commands in the terminal:
+```bash
+brew tap mongodb/brew
+brew update
+brew install mongodb-community
+```
+#### NOTE:
+the mongod.conf file may have different locations depending on your OS.
+#### MAC OS INTEL PROCESSOR:
+- conf file location: `/usr/local/etc/mongod.conf`
+- log directory location: `/usr/local/var/log/mongodb`
+- data directory location: `/usr/local/var/mongodb`
+
+#### MAC OS SILICON PROCESSOR:
+- conf file location: `/opt/homebrew/etc/mongod.conf`
+- log directory location: `/opt/homebrew/var/log/mongodb`
+- data directory location: `/opt/homebrew/var/mongodb`
+
+#### WHEN YOU HAVE INSTALLED MONGODB:
+##### Create the following bash method in your .bash_profile file:
+```bash
+function mongo() {
+  if [ $# -eq 0 ]; then
+      echo "Opening MongoDB Service Client ..."
+      brew services start mongodb-community
+
+      echo  "Verifying that MongoDB has started successfully ... "
+      ps aux | grep -v grep | grep mongod
+  fi
+  if [ "$1" = "--restart" ]; then
+    echo "Restarting the mongodb service ..."
+    brew services restart mongodb-services
+  fi  
+  if [ "$1" = "--stop" ]; then
+    echo "Stopping MongoDB Service ..."
+    brew services stop mongodb-community
+  fi  
+}
+```
+> open your conf file with nano, vim, or code,
+```bash
+systemLog:
+  destination: file
+  path: /usr/local/var/log/mongodb/mongo.log
+  logAppend: true
+storage:
+  dbPath: /usr/local/var/mongodb
+net:
+  bindIp: 127.0.0.1, ::1
+  ipv6: true
+```
+
+#### TELL MONGOD WHERE TO STORE DATA:
+Note the location of the log file and associate it with the mongod executable.
+```bash
+mongod --dbpath /usr/local/var/mongodb
+```
+
+#### connect mongo shell ( MONGOSH ) to your local MongoDB instance:
+```bash
+mongosh "mongodb://127.0.0.1:12027/database_name"
+```
+#### KEEP MongoDB and MONGOSH updated:
+```bash
+brew update
+brew upgrade mongodb-community
+brew upgrade mongosh
+```
+
+## PROGRAMMING LANGUAGE 
  - Typescript
 
 ## POSTMAN Collection
@@ -21,27 +113,27 @@ Is located in the `libs/src` directory.
 
 Every microservice has its own PORT & TCP PORT. 
 Here they are listed
-AUTH SERVICE: 3200
-LOCATION SERVICE: 3350
-LOGGED TIME SERVICE: 4400
-TASKS SERVICE: 3400
-WORKER SERVICE: 3100
+- AUTH SERVICE: 3200
+- LOCATION SERVICE: 3350
+- LOGGED TIME SERVICE: 4400
+- TASKS SERVICE: 3400
+- WORKER SERVICE: 3100
 
 Each respective service has an `api` global prefix configured in its main.ts file,
 
 ## SERVICE URLS:
-AUTH SERVICE: http://localhost:3200/api
-LOCATION SERVICE: http://localhost:3350/api
-LOGGED TIME SERVICE: http://localhost:4400/api
-TASKS SERVICE: http://localhost:3400/api
-WORKER SERVICE: http://localhost:3100/api
+- AUTH SERVICE: http://localhost:3200/api
+- LOCATION SERVICE: http://localhost:3350/api
+- LOGGED TIME SERVICE: http://localhost:4400/api
+- TASKS SERVICE: http://localhost:3400/api
+- WORKER SERVICE: http://localhost:3100/api
 
 ## SWAGGER DOCS
-AUTH SERVICE : http://localhost:3200/api/swagger/docs
-LOCATION SERVICE : http://localhost:3350/api/swagger/docs
-LOGGED TIME SERVICE : http://localhost:4400/api/swagger/docs
-TASKS SERVICE : http://localhost:3400/api/swagger/docs
-WORKER SERVICE : http://localhost:3100/api/swagger/docs
+- AUTH SERVICE : http://localhost:3200/api/swagger/docs
+- LOCATION SERVICE : http://localhost:3350/api/swagger/docs
+- LOGGED TIME SERVICE : http://localhost:4400/api/swagger/docs
+- TASKS SERVICE : http://localhost:3400/api/swagger/docs
+- WORKER SERVICE : http://localhost:3100/api/swagger/docs
 
 ## MONGODB
 We are using the Mongodb Data store to store and manipulate the data.
