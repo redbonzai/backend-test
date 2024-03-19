@@ -22,13 +22,23 @@ export class LaborCostFilterDto {
   // includeIncomplete?: boolean;
 
   @IsOptional()
-  @Transform(({ value }) => value.split(',').map((item: string) => item.trim()))
+  @Transform(({ value }) =>
+    value
+      .toString()
+      .split(',')
+      .map((item: string) => item.trim()),
+  )
   @IsMongoId({ each: true })
   @ArrayNotEmpty()
   workerIds?: string[];
 
   @IsOptional()
-  @Transform(({ value }) => value.split(',').map((item: string) => item.trim()))
+  @Transform(({ value }) =>
+    value
+      .toString()
+      .split(',')
+      .map((item: string) => item.trim()),
+  )
   @IsMongoId({ each: true })
   @ArrayNotEmpty()
   locationIds?: string[];

@@ -1,6 +1,6 @@
 {
   "name": "worker-microservices",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "",
   "author": "",
   "private": true,
@@ -17,7 +17,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/workers/test/jest-e2e.json"
+    "workers:test:e2e": "jest --config ./apps/workers/test/jest-e2e.json",
+    "tasks:test:e2e": "jest --config ./apps/tasks/test/jest-e2e.json",
+    "locations:test:e2e": "jest --config ./apps/locations/test/jest-e2e.json",
+    "loggedtime:test:e2e": "jest --config ./apps/loggedtime/test/jest-e2e.json",
+    "auth:test:e2e": "jest --config ./apps/auth/test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

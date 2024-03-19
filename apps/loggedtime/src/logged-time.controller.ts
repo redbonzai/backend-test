@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Query } from "@nestjs/common";
 import { LoggedTimeService } from './logged-time.service';
 import { AbstractDocument } from '@app/common/database';
 import { CreateLoggedTimeDto } from '@loggedtime/dto/create-loggedtime.dto';
@@ -14,6 +14,7 @@ import {
 @ApiTags('Logged Time')
 @Controller('loggedtime')
 export class LoggedTimeController {
+  protected readonly logger = new Logger(LoggedTimeController.name);
   constructor(private readonly loggedTimeService: LoggedTimeService) {}
 
   @Post()
@@ -82,7 +83,12 @@ export class LoggedTimeController {
   laborWorker(
     @Query() filterDto: LaborCostFilterDto,
   ): Promise<AbstractDocument[]> {
-    return this.loggedTimeService.laborWorker(filterDto);
+    try {
+      return this.loggedTimeService.laborWorker(filterDto);
+    } catch (error) {
+      this.logger.error('labWorker Exception:', error);
+      console.log('THERE WAS AN EXCEPTION IN LABOR WORKER', error);
+    }
   }
 
   @Get('labor/location')
