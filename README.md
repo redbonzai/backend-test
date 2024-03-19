@@ -1,8 +1,12 @@
 # Installation
 
+## ENV FILES
+Every service has its own env.example file. 
+You will have to copy that file into an .env file. 
+```terminal
+ cp .env.example .env
+```
 ## DOCKER
-
-
 To set up the environment, you will need to first install [Docker](https://docs.docker.com/engine/install/).
 Navigate to the project directory and run:
 
