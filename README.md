@@ -150,10 +150,11 @@ each service's module.ts file.
 THis is configured within each service' module.ts file.
 
 ## MICROSERVICE ARTCHITECTURE & FEATURES
-- microservices in a monorepo with global shared resources
-- microservices communicate via TCP
+- Custom authentication guards.  Can authenticate a route in a matter of seconds.
+- Microservices in a monorepo with global shared resources
+- Microservices communicate via TCP
 - SOLID principle methodology
-- using custom authentication guards for authorization & authentication
+- Using custom authentication guards for authorization & authentication
 - API DESIGN Follows open api specification
 - Authenticated user can transact these queries per the JwtAuthGuard
 
