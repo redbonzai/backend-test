@@ -22,6 +22,12 @@ docker compose up
 To bring up the services. 
 You will see the pino logs starting to appear.
 This will stand up the services, You will see the pino logs starting to appear.
+## TESTS
+Run the tests with the following command:
+The tests that fail are the ones not implemented yet.  
+```terminal
+pnpm run test
+```
 
 ## PROGRAMMING LANGUAGE 
  - Typescript
