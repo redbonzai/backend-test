@@ -56,14 +56,22 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
       });
     }
 
+    if (filterDto.taskIds && filterDto.taskIds.length > 0) {
+      matchStages.push({
+        $match: {
+          location: {
+            $in: filterDto.locationIds.map((id) => new Types.ObjectId(id)),
+          },
+        },
+      });
+    }
+
     console.log('MATCH STAGES', JSON.stringify(matchStages));
     return matchStages;
   }
 
   async laborCostByWorker(filterDto: LaborCostFilterDto): Promise<any[]> {
-    console.log('filterDto', filterDto);
     const matchStages = this.buildMatchStages(filterDto);
-    console.log('matchStages', matchStages);
 
     const pipeline = [
       {
@@ -154,6 +162,52 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
           _id: 0,
           location: '$_id',
           totalLaborCost: 1,
+        },
+      },
+    ];
+
+    return await this.loggedTimeModel.aggregate(pipeline).exec();
+  }
+
+  async tasksPerWorker(filterDto: LaborCostFilterDto): Promise<any[]> {
+    const matchStages = this.buildMatchStages(filterDto);
+
+    const pipeline = [
+      {
+        $lookup: {
+          from: 'taskdocuments',
+          localField: 'task',
+          foreignField: '_id',
+          as: 'taskDetails',
+        },
+      },
+      { $unwind: '$taskDetails' },
+      // Integrating the dynamic match stages built from filterDto
+      ...matchStages,
+      {
+        $lookup: {
+          from: 'workerdocuments', // Ensure this matches your MongoDB collection name for workers
+          localField: 'worker',
+          foreignField: '_id',
+          as: 'workerDetails',
+        },
+      },
+      { $unwind: '$workerDetails' },
+      {
+        $group: {
+          _id: '$worker',
+          numberOfTasks: { $sum: 1 },
+          workerName: { $first: '$workerDetails.username' }, // Getting the worker's name
+          totalHours: { $sum: { $divide: ['$taskDetails.timeSeconds', 3600] } }, // Sum total hours per worker, adjust if necessary
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          workerId: '$_id',
+          workerName: 1,
+          numberOfTasks: 1,
+          totalHours: 1,
         },
       },
     ];

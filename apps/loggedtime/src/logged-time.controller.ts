@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Logger, Param, Post, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { LoggedTimeService } from './logged-time.service';
 import { AbstractDocument } from '@app/common/database';
 import { CreateLoggedTimeDto } from '@loggedtime/dto/create-loggedtime.dto';
@@ -121,5 +129,12 @@ export class LoggedTimeController {
     @Query() filterDto: LaborCostFilterDto,
   ): Promise<AbstractDocument[]> {
     return this.loggedTimeService.laborLocation(filterDto);
+  }
+
+  @Get('tasks/worker')
+  tasksPerWorker(
+    @Query() filterDto: LaborCostFilterDto,
+  ): Promise<AbstractDocument[]> {
+    return this.loggedTimeService.tasksPerWorker(filterDto);
   }
 }

@@ -1,5 +1,3 @@
-// In labor-cost.dto.ts or a relevant DTO file
-
 import {
   IsOptional,
   IsBoolean,
@@ -13,13 +11,6 @@ export class LaborCostFilterDto {
   @Transform(({ value }) => value === 'true', { toClassOnly: true })
   @IsBoolean()
   includeCompleted?: boolean;
-
-  // @IsOptional()
-  // @Transform(({ value }) =>
-  //   value === 'true' ? true : value === 'false' ? false : value,
-  // )
-  // @IsBoolean()
-  // includeIncomplete?: boolean;
 
   @IsOptional()
   @Transform(({ value }) =>
@@ -42,4 +33,15 @@ export class LaborCostFilterDto {
   @IsMongoId({ each: true })
   @ArrayNotEmpty()
   locationIds?: string[];
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    value
+      .toString()
+      .split(',')
+      .map((item: string) => item.trim()),
+  )
+  @IsMongoId({ each: true })
+  @ArrayNotEmpty()
+  taskIds?: string[];
 }

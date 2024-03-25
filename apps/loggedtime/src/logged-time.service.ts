@@ -27,4 +27,8 @@ export class LoggedTimeService {
   laborLocation(filterDto: LaborCostFilterDto): Promise<AbstractDocument[]> {
     return this.loggedTimeRepository.laborCostByLocation(filterDto);
   }
+
+  tasksPerWorker(filterDto: LaborCostFilterDto): Promise<AbstractDocument[]> {
+    return this.loggedTimeRepository.tasksPerWorker(filterDto);
+  }
 }
