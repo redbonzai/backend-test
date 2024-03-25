@@ -94,9 +94,6 @@ export class UsersController {
     @Param('id') id: Types.ObjectId,
     @Body() user: UpdateUserDto,
   ): Promise<UserDocument> {
-    return this.usersService.update(
-      await identifierToDTO(GetUserDto, id, '_id'),
-      user,
-    );
+    return this.usersService.update(id, user);
   }
 }
