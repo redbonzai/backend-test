@@ -23,7 +23,7 @@ export class LoggedTimeRepository extends AbstractRepository<AbstractDocument> {
     @InjectModel(LocationDocument.name)
     private readonly locationModel: Model<LocationDocument>,
   ) {
-    super(loggedTimeModel);
+    super(loggedTimeModel as unknown as Model<AbstractDocument>);
   }
 
   // Method to build match stages for filtering

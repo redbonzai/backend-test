@@ -18,7 +18,7 @@ export class TaskRepository extends AbstractRepository<AbstractDocument> {
     @InjectModel(LocationDocument.name)
     private readonly locationModel: Model<LocationDocument>,
   ) {
-    super(taskModel);
+    super(taskModel as unknown as Model<AbstractDocument>);
   }
 
   async create(createTaskDto: CreateTaskDto): Promise<TaskDocument> {

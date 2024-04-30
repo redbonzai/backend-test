@@ -3,7 +3,7 @@ import { LocationModule } from './location.module';
 import { ConfigService } from '@nestjs/config';
 import { Transport } from '@nestjs/microservices';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { readPackageVersion } from '@app/common/utilities';

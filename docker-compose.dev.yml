@@ -1,83 +1,109 @@
+version: '3.8'
+
 services:
   auth:
     build:
       context: .
       dockerfile: ./apps/auth/docker/Development.dockerfile
       target: development
-    env_file:
-      - ./apps/auth/.env
     ports:
       - '3200:3200'
     volumes:
       - .:/usr/src/app
+      # - /usr/src/app/node_modules
+    networks:
+      - limble
+    env_file:
+      - ./apps/auth/.env
     environment:
       NODE_ENV: development
     command: pnpm run start:dev auth
+
 
   workers:
     build:
       context: .
       dockerfile: ./apps/workers/docker/Development.dockerfile
       target: development
-    command: pnpm run start:dev workers
-    env_file:
-      - ./apps/workers/.env
-    environment:
-      NODE_ENV: development
     ports:
       - '3100:3100'
     volumes:
       - .:/usr/src/app
+      # - /usr/src/app/node_modules
     networks:
       - limble
+    env_file:
+      - ./apps/workers/.env
+    environment:
+      NODE_ENV: development
+    command: pnpm run start:dev workers
+
 
   locations:
     build:
       context: .
-      dockerfile: apps/locations/docker/Development.dockerfile
+      dockerfile: ./apps/locations/docker/Development.dockerfile
       target: development
-    command: pnpm run start:dev locations
-    env_file:
-      - apps/locations/.env
     ports:
       - '3350:3350'
     volumes:
       - .:/usr/src/app
+      # - /usr/src/app/node_modules
     networks:
       - limble
+    env_file:
+      - ./apps/locations/.env
+    environment:
+      NODE_ENV: development
+    command: pnpm run start:dev locations
+
+
   tasks:
     build:
       context: .
-      dockerfile: apps/tasks/docker/Dockerfile
+      dockerfile: ./apps/tasks/docker/Development.dockerfile
       target: development
-    command: pnpm run start:dev tasks
-    env_file:
-      - apps/tasks/.env
     ports:
       - '3400:3400'
     volumes:
       - .:/usr/src/app
+      # - /usr/src/app/node_modules
     networks:
       - limble
+    env_file:
+      - ./apps/tasks/.env
+    environment:
+      NODE_ENV: development
+    command: pnpm run start:dev tasks
+
+
   loggedtime:
     build:
       context: .
-      dockerfile: ./apps/loggedtime/docker/Dockerfile
+      dockerfile: ./apps/loggedtime/docker/Development.dockerfile
       target: development
-    command: pnpm run start:dev loggedtime
-    env_file:
-      - ./apps/loggedtime/.env
     ports:
       - '4400:4400'
     volumes:
       - .:/usr/src/app
+      # - /usr/src/app/node_modules
     networks:
       - limble
+    env_file:
+      - ./apps/loggedtime/.env
+    environment:
+      NODE_ENV: development
+    command: pnpm run start:dev loggedtime
+
+
   mongo:
     image: mongo
     ports:
       - '27017:27017'
+    networks:
+      - limble
 
-networks:
-  limble:
-    driver: bridge
+
+networks:  
+    limble:
+      driver: bridge
