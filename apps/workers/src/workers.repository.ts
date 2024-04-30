@@ -13,7 +13,7 @@ export class WorkersRepository extends AbstractRepository<AbstractDocument> {
     @InjectModel(WorkerDocument.name)
     workerModel: Model<WorkerDocument>,
   ) {
-    super(workerModel);
+    super(workerModel as unknown as Model<AbstractDocument>);
     this.workerModel = workerModel;
   }
 

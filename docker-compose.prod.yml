@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  auth:
+    build:
+      context: .
+      dockerfile: Production.dockerfile
+    ports:
+      - "3200:3200"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./apps/auth/.env
+    networks:
+      - limble
+    command: node dist/apps/auth/main.js
+
+  workers:
+    build:
+      context: .
+      dockerfile: Production.dockerfile
+    ports:
+      - "3100:3100"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./apps/workers/.env
+    networks:
+      - limble
+    command: node dist/apps/workers/main.js
+
+  locations:
+    build:
+      context: .
+      dockerfile: Production.dockerfile
+    ports:
+      - "3350:3350"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./apps/locations/.env
+    networks:
+      - limble
+    command: node dist/apps/locations/main.js
+
+  tasks:
+    build:
+      context: .
+      dockerfile: Production.dockerfile
+    ports:
+      - "3400:3400"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./apps/tasks/.env
+    networks:
+      - limble
+    command: node dist/apps/tasks/main.js
+
+  loggedtime:
+    build:
+      context: .
+      dockerfile: Production.dockerfile
+    ports:
+      - "4400:4400"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./apps/loggedtime/.env
+    networks:
+      - limble
+    command: node dist/apps/loggedtime/main.js
+
+networks:
+  limble:
+    driver: bridge

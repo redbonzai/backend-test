@@ -14,7 +14,7 @@ export class LocationRepository extends AbstractRepository<AbstractDocument> {
     @InjectModel(LocationDocument.name)
     locationModel: Model<LocationDocument>,
   ) {
-    super(locationModel);
+    super(locationModel as unknown as Model<AbstractDocument>);
     this.locationModel = locationModel;
   }
 

@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { LoggedTimeModule } from './logged-time.module';
 import { Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';

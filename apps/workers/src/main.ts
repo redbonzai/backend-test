@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { WorkersModule } from './workers.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { readPackageVersion } from '@app/common/utilities';
 
